@@ -216,7 +216,7 @@
             const resultado = document.getElementById("result");
 
             if (ticketsDB[numero]) 
-            {resultado.innerHTML = `<div class="success">🎟️ Aquí está tu boleto: <a href="${ticketsDB[numero]}" target="_blank">${numero}</a></div>`;
+            {resultado.innerHTML = `<div class="success">🎟️ Para visualizar tu boleto presiona el número: <a href="${ticketsDB[numero]}" target="_blank">${numero}</a></div>`;
             } else {
                 resultado.innerHTML = '<div class="error">❌ Número de invitación no encontrado. Verifica e intenta de nuevo.</div>';
             }
@@ -232,6 +232,7 @@
 </body>
 
 </html>
+
 
 
 
