@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Consulta tu Boleto</title>
+    <link href="https://fonts.googleapis.com/css2?family=Antic+Didone&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Antic Didone', serif;
+            background-color: #f9f9f9;
+            text-align: center;
+            padding: 50px;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 15px;
+            display: inline-block;
+            box-shadow: 0 4px 20px rgba(182, 154, 37, 0.2);
+            border: 2px solid #b69a25;
+        }
+        h1 {
+            color: #b69a25;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            font-weight: normal;
+        }
+        p {
+            color: #333;
+            font-size: 1.1em;
+            margin-bottom: 25px;
+        }
+        input[type="text"] {
+            padding: 12px 15px;
+            width: 250px;
+            font-size: 16px;
+            font-family: 'Antic Didone', serif;
+            border: 2px solid #b69a25;
+            border-radius: 8px;
+            outline: none;
+            transition: box-shadow 0.3s ease;
+        }
+        input[type="text"]:focus {
+            box-shadow: 0 0 10px rgba(182, 154, 37, 0.3);
+        }
+        input[type="text"]::placeholder {
+            color: #999;
+            font-family: 'Antic Didone', serif;
+        }
+        button {
+            padding: 12px 25px;
+            font-size: 16px;
+            font-family: 'Antic Didone', serif;
+            margin-left: 15px;
+            cursor: pointer;
+            background-color: #b69a25;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+        }
+        button:hover {
+            background-color: #a08920;
+            transform: translateY(-1px);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        #result {
+            margin-top: 30px;
+            font-size: 18px;
+            font-family: 'Antic Didone', serif;
+        }
+        a {
+            color: #b69a25;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+        a:hover {
+            color: #a08920;
+            text-decoration: underline;
+        }
+        .success {
+            color: #b69a25;
+            background-color: rgba(182, 154, 37, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #b69a25;
+        }
+        .error {
+            color: #d32f2f;
+            background-color: rgba(211, 47, 47, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #d32f2f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Consulta tu boleto</h1>
+        <p>¡Estamos muy emocionados por que asistas a nuestra boda!</p>
+        <p>Por favor, ingresa tu número de invitación:</p>
+        <input type="text" id="invitationNumber" placeholder="Ej. 001">
+        <button onclick="buscarBoleto()">Buscar</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const ticketsDB = {
+    "1001": "https://jairrivera-11.github.io/boletos-Boda/1001.pdf",
+    "1002": "https://jairrivera-11.github.io/boletos-Boda/1002.pdf",
+    "1003": "https://jairrivera-11.github.io/boletos-Boda/1003.pdf",
+    "1004": "https://jairrivera-11.github.io/boletos-Boda/1004.pdf",
+    "1005": "https://jairrivera-11.github.io/boletos-Boda/1005.pdf",
+    "1006": "https://jairrivera-11.github.io/boletos-Boda/1006.pdf",
+    "1007": "https://jairrivera-11.github.io/boletos-Boda/1007.pdf",
+    "1008": "https://jairrivera-11.github.io/boletos-Boda/1008.pdf",
+    "1009": "https://jairrivera-11.github.io/boletos-Boda/1009.pdf",
+    "1010": "https://jairrivera-11.github.io/boletos-Boda/1010.pdf",
+    "1011": "https://jairrivera-11.github.io/boletos-Boda/1011.pdf",
+    "1012": "https://jairrivera-11.github.io/boletos-Boda/1012.pdf",
+    "1013": "https://jairrivera-11.github.io/boletos-Boda/1013.pdf",
+    "1014": "https://jairrivera-11.github.io/boletos-Boda/1014.pdf",
+    "1015": "https://jairrivera-11.github.io/boletos-Boda/1015.pdf",
+    "1016": "https://jairrivera-11.github.io/boletos-Boda/1016.pdf",
+    "1017": "https://jairrivera-11.github.io/boletos-Boda/1017.pdf",
+    "1018": "https://jairrivera-11.github.io/boletos-Boda/1018.pdf",
+    "1019": "https://jairrivera-11.github.io/boletos-Boda/1019.pdf",
+    "1020": "https://jairrivera-11.github.io/boletos-Boda/1020.pdf",
+    "1021": "https://jairrivera-11.github.io/boletos-Boda/1021.pdf",
+    "1022": "https://jairrivera-11.github.io/boletos-Boda/1022.pdf",
+    "1023": "https://jairrivera-11.github.io/boletos-Boda/1023.pdf",
+    "1024": "https://jairrivera-11.github.io/boletos-Boda/1024.pdf",
+    "1025": "https://jairrivera-11.github.io/boletos-Boda/1025.pdf",
+    "1026": "https://jairrivera-11.github.io/boletos-Boda/1026.pdf",
+    "1027": "https://jairrivera-11.github.io/boletos-Boda/1027.pdf",
+    "1028": "https://jairrivera-11.github.io/boletos-Boda/1028.pdf",
+    "1029": "https://jairrivera-11.github.io/boletos-Boda/1029.pdf",
+    "1030": "https://jairrivera-11.github.io/boletos-Boda/1030.pdf",
+    "1031": "https://jairrivera-11.github.io/boletos-Boda/1031.pdf",
+    "1032": "https://jairrivera-11.github.io/boletos-Boda/1032.pdf",
+    "1033": "https://jairrivera-11.github.io/boletos-Boda/1033.pdf",
+    "1034": "https://jairrivera-11.github.io/boletos-Boda/1034.pdf",
+    "1035": "https://jairrivera-11.github.io/boletos-Boda/1035.pdf",
+    "1036": "https://jairrivera-11.github.io/boletos-Boda/1036.pdf",
+    "1037": "https://jairrivera-11.github.io/boletos-Boda/1037.pdf",
+    "1038": "https://jairrivera-11.github.io/boletos-Boda/1038.pdf",
+    "1039": "https://jairrivera-11.github.io/boletos-Boda/1039.pdf",
+    "1040": "https://jairrivera-11.github.io/boletos-Boda/1040.pdf",
+    "1041": "https://jairrivera-11.github.io/boletos-Boda/1041.pdf",
+    "1042": "https://jairrivera-11.github.io/boletos-Boda/1042.pdf",
+    "1043": "https://jairrivera-11.github.io/boletos-Boda/1043.pdf",
+    "1044": "https://jairrivera-11.github.io/boletos-Boda/1044.pdf",
+    "1045": "https://jairrivera-11.github.io/boletos-Boda/1045.pdf",
+    "1046": "https://jairrivera-11.github.io/boletos-Boda/1046.pdf",
+    "1047": "https://jairrivera-11.github.io/boletos-Boda/1047.pdf",
+    "1048": "https://jairrivera-11.github.io/boletos-Boda/1048.pdf",
+    "1049": "https://jairrivera-11.github.io/boletos-Boda/1049.pdf",
+    "1050": "https://jairrivera-11.github.io/boletos-Boda/1050.pdf",
+    "1051": "https://jairrivera-11.github.io/boletos-Boda/1051.pdf",
+    "1052": "https://jairrivera-11.github.io/boletos-Boda/1052.pdf",
+    "1053": "https://jairrivera-11.github.io/boletos-Boda/1053.pdf",
+    "1054": "https://jairrivera-11.github.io/boletos-Boda/1054.pdf",
+    "1055": "https://jairrivera-11.github.io/boletos-Boda/1055.pdf",
+    "1056": "https://jairrivera-11.github.io/boletos-Boda/1056.pdf",
+    "1057": "https://jairrivera-11.github.io/boletos-Boda/1057.pdf",
+    "1058": "https://jairrivera-11.github.io/boletos-Boda/1058.pdf",
+    "1059": "https://jairrivera-11.github.io/boletos-Boda/1059.pdf",
+    "1060": "https://jairrivera-11.github.io/boletos-Boda/1060.pdf",
+    "1061": "https://jairrivera-11.github.io/boletos-Boda/1061.pdf",
+    "1062": "https://jairrivera-11.github.io/boletos-Boda/1062.pdf",
+    "1063": "https://jairrivera-11.github.io/boletos-Boda/1063.pdf",
+    "1064": "https://jairrivera-11.github.io/boletos-Boda/1064.pdf",
+    "1065": "https://jairrivera-11.github.io/boletos-Boda/1065.pdf",
+    "1066": "https://jairrivera-11.github.io/boletos-Boda/1066.pdf",
+    "1067": "https://jairrivera-11.github.io/boletos-Boda/1067.pdf",
+    "1068": "https://jairrivera-11.github.io/boletos-Boda/1068.pdf",
+    "1069": "https://jairrivera-11.github.io/boletos-Boda/1069.pdf",
+    "1070": "https://jairrivera-11.github.io/boletos-Boda/1070.pdf",
+    "1071": "https://jairrivera-11.github.io/boletos-Boda/1071.pdf",
+    "1072": "https://jairrivera-11.github.io/boletos-Boda/1072.pdf",
+    "1073": "https://jairrivera-11.github.io/boletos-Boda/1073.pdf",
+    "1074": "https://jairrivera-11.github.io/boletos-Boda/1074.pdf",
+    "1075": "https://jairrivera-11.github.io/boletos-Boda/1075.pdf",
+    "1076": "https://jairrivera-11.github.io/boletos-Boda/1076.pdf",
+    "1077": "https://jairrivera-11.github.io/boletos-Boda/1077.pdf",
+    "1078": "https://jairrivera-11.github.io/boletos-Boda/1078.pdf",
+    "1079": "https://jairrivera-11.github.io/boletos-Boda/1079.pdf",
+    "1080": "https://jairrivera-11.github.io/boletos-Boda/1080.pdf",
+    "1081": "https://jairrivera-11.github.io/boletos-Boda/1081.pdf",
+    "1082": "https://jairrivera-11.github.io/boletos-Boda/1082.pdf",
+    "1083": "https://jairrivera-11.github.io/boletos-Boda/1083.pdf",
+    "1084": "https://jairrivera-11.github.io/boletos-Boda/1084.pdf",
+    "1085": "https://jairrivera-11.github.io/boletos-Boda/1085.pdf",
+    "1086": "https://jairrivera-11.github.io/boletos-Boda/1086.pdf",
+    "1087": "https://jairrivera-11.github.io/boletos-Boda/1087.pdf",
+    "1088": "https://jairrivera-11.github.io/boletos-Boda/1088.pdf",
+    "1089": "https://jairrivera-11.github.io/boletos-Boda/1089.pdf",
+    "1090": "https://jairrivera-11.github.io/boletos-Boda/1090.pdf",
+    "1091": "https://jairrivera-11.github.io/boletos-Boda/1091.pdf",
+    "1092": "https://jairrivera-11.github.io/boletos-Boda/1092.pdf",
+    "1093": "https://jairrivera-11.github.io/boletos-Boda/1093.pdf",
+    "1094": "https://jairrivera-11.github.io/boletos-Boda/1094.pdf",
+    "1095": "https://jairrivera-11.github.io/boletos-Boda/1095.pdf",
+    "1096": "https://jairrivera-11.github.io/boletos-Boda/1096.pdf",
+    "1097": "https://jairrivera-11.github.io/boletos-Boda/1097.pdf",
+    "1098": "https://jairrivera-11.github.io/boletos-Boda/1098.pdf",
+    "1099": "https://jairrivera-11.github.io/boletos-Boda/1099.pdf",
+    "1100": "https://jairrivera-11.github.io/boletos-Boda/1100.pdf"
+};
+        function buscarBoleto() {
+            const numero = document.getElementById("invitationNumber").value.trim();
+            const resultado = document.getElementById("result");
+
+            if (ticketsDB[numero]) 
+            {resultado.innerHTML = `<div class="success">🎟️ Para visualizar tu boleto presiona el número: <a href="${ticketsDB[numero]}" target="_blank">${numero}</a></div>`;
+            } else {
+                resultado.innerHTML = '<div class="error">❌ Número de invitación no encontrado. Verifica e intenta de nuevo.</div>';
+            }
+        }
+
+        // Permitir buscar con Enter
+        document.getElementById("invitationNumber").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                buscarBoleto();
+            }
+        });
+    </script>
+</body>
+
+</html>
